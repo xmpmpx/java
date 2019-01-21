@@ -1,5 +1,7 @@
 package generics;
 
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 
 public class Ograniczenia {
@@ -14,12 +16,12 @@ public class Ograniczenia {
         // System.out.println(rozmiarListy(listaString)); // nie można gdyż NIE rozszerza Number
 
 
-        ArrayList<Number> listaNumber = new ArrayList<>();
+        ArrayList<Writer> listaWriter = new ArrayList<>();
         ArrayList<Float> listaFloat = new ArrayList<>();
 
         //Ograniczenie dolne
-        System.out.println(rozmiarListy2(listaNumber)); // można gdyż typ nadrzędny Integer
-        // System.out.println(rozmiarListy2(listaFloat)); // nie można gdyż Float to nie typ nadrzędny typu Integer
+        System.out.println(rozmiarListy2(listaWriter)); // można gdyż typ nadrzędny PrintWriter
+        // System.out.println(rozmiarListy2(listaFloat)); // nie można gdyż Float to nie typ nadrzędny typu PrintWriter
     }
 
     public static int rozmiarListy(ArrayList<? extends Number> lista) { // tylko typy podrzędne typu Number
@@ -28,9 +30,9 @@ public class Ograniczenia {
         return lista.size();
     }
 
-    public static int rozmiarListy2(ArrayList<? super Integer> lista) { // tylko typy nadrzędne typu Integer
+    public static int rozmiarListy2(ArrayList<? super PrintWriter> lista) { // tylko typy nadrzędne typu PrintWriter
         Object object = lista.get(0); // Object bo nie wiemy jaki typ
-        lista.add(5); // Można dodać wartość typu
+        lista.add(new PrintWriter(Writer.nullWriter())); // Można dodać wartość typu
         return lista.size();
     }
 }
