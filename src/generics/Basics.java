@@ -15,7 +15,7 @@ public class Basics {
     }
 
     public static int rozmiarListy(ArrayList<?> lista) {
-        // Object o = lista.get(); - tylko Object przy pobraniu
+        Object o = lista.get(0); // tylko Object przy pobraniu
         // lista.add(2); - nie można dodawać elementów
         lista.add(null); //tylko null można dodać
         return lista.size();
