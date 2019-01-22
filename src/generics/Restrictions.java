@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 
-public class Ograniczenia {
+public class Restrictions {
 
     public static void main(String[] args) {
 
