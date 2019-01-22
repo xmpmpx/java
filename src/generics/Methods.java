@@ -35,4 +35,12 @@ public class Methods {
         lista.add(element); // można dodać
         System.out.println(lista);
     }
+
+    public static <T extends Number> double sumuj(List<T> l1, List<T> l2) {
+        return l1.get(0).doubleValue() + l2.get(0).doubleValue();
+    }
+
+    public static <T extends Number, V extends String> String scal(List<T> l1, List<V> l2) {
+        return l1.get(0).toString() + l2.get(0);
+    }
 }
