@@ -9,11 +9,9 @@ import java.util.List;
 public class TypeArguments {
     public static void main(String[] args) {
         List<String> lista = new ArrayList<>(); // tylko typy referencyjne
-        List<int> lista1 = new ArrayList<int>(); // trzeba podać dodatkowo typ podczas tworzenia obiektu
+        // List<int> lista1 = new ArrayList<int>(); // error podczas kompilacji
         List<int[]> lista2 = new ArrayList<>(); // tablica traktowana jako obiekt bo dziedziczy po Objects
         List<?> lista3 = new ArrayList<>();
-
-        lista1.add(5);
     }
 
 }

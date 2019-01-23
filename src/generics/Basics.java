@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 public class Basics {
 
+    // ZALETY
+    // Sprawdzanie typu przy dodawaniu
+    // Automatyczne rzutowanie przy odczycie
+
     public static void main(String[] args) {
 
         Number nr = 5.5; //dziedziczenie - przypisanie Double to Number
