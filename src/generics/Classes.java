@@ -11,9 +11,6 @@ public class Classes<T, K> {
 
     // private static T pole2; - musi być instancja klasy by podać typ, więc static odpada
 
-    void metoda(T arg) {
-    }
-
     public static void main(String[] args) {
         LosowaLista<Integer> lista = new LosowaLista<>();
         lista.add(4);
@@ -25,11 +22,15 @@ public class Classes<T, K> {
         LosowaLista<Pies> lista2 = new LosowaLista<>();
         LosowaLista<Kot> lista3 = new LosowaLista<>();
     }
+
+    void metoda(T arg) {
+    }
 }
 
 class LosowaLista<T extends Comparable<? super T>> { // możliwość wielu extends za pomocą &
 
     private List<T> lista = new ArrayList<>();
+    // private List<T extends Number> lista = new ArrayList<>(); - nie można zmieniać typu
 
     private Random random = new Random();
 
