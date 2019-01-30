@@ -25,6 +25,7 @@ public class Methods {
 
     public static <T> T printAndReturn(T object) {
         System.out.println(object);
+        //T obj = new T(); // - nie można tworzyć bezpośrednio
         return object;
     }
 
