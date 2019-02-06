@@ -25,7 +25,7 @@ class EqualsClone<K, V> {
 
     @Override
     protected EqualsClone<K, V> clone() throws CloneNotSupportedException {
-        EqualsClone<K, V> obj = (Para<K, V) super.clone();
+        EqualsClone<K, V> obj = (EqualsClone<K, V>) super.clone();
 
         // nie można utworzyć obiektu nieznanego typu
         // należy użyć refleksji
