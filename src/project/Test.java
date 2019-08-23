@@ -14,8 +14,7 @@ import java.util.Set;
 public class Test {
     public static void main(String[] args) {
         List<String> list = Collections.singletonList("String");
-        Set<String> stringSet = new HashSet<>();
-        stringSet.addAll(list);
+        Set<String> stringSet = new HashSet<>(list);
         System.out.println(stringSet);
 
     }
