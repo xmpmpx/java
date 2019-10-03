@@ -5,18 +5,25 @@ import org.joda.time.format.ISOPeriodFormat;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class Test {
     public static void main(String[] args) {
-        List<String> list = Collections.singletonList("String");
-        Set<String> stringSet = new HashSet<>(list);
-        System.out.println(stringSet);
+        double v = new BigDecimal("187.3002003").doubleValue();
+        System.out.println(new BigDecimal(1.0));
+        System.out.println(BigDecimal.valueOf(1.0));
 
+        System.out.println(new BigDecimal(0.1));
+        System.out.println(BigDecimal.valueOf(0.1));
+
+        int a = 2;
+        System.out.println(++a + ++a * ++a);
+
+        int x = 127;
+        byte r = (byte) x;
+        System.out.println(r);
     }
 
     private static void periodToHHMM() {
