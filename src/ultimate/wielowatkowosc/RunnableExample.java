@@ -1,4 +1,4 @@
-package ultimate.Wielowatkowosc;
+package ultimate.wielowatkowosc;
 
 public class RunnableExample {
     public static void main(String[] args) {

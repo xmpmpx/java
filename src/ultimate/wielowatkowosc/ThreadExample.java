@@ -1,4 +1,4 @@
-package ultimate.Wielowatkowosc;
+package ultimate.wielowatkowosc;
 
 import java.util.stream.IntStream;
 
