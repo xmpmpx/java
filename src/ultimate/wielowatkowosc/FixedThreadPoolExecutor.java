@@ -10,6 +10,8 @@ public class FixedThreadPoolExecutor {
         System.out.println("Główny wątek: " + Thread.currentThread().getName());
 
         //ExecutorService - service pomagający nam zarządzenie dużą ilością wątków
+        //automtycznie zarządza wątkami - trzyma runnable w puli i je dodaje do wcześniej utworzonych przez Executor wątków
+        //kiedy wątek jest długo nieużywany - wyłącza go zarządzając tym samym pamięcia JVM.
         ExecutorService executorService = Executors.newFixedThreadPool(2); //określona z góry liczba wątków
 
         Runnable runnable1 = () -> {
