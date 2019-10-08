@@ -20,12 +20,15 @@ public class CallableFuture {
         ExecutorService executorService = Executors.newFixedThreadPool(2);
         Future<Integer> result = executorService.submit(callable);
         try {
-            System.out.println(result.get());
+            System.out.println(result.get()); //blokuje główny wątek dopóki otrzyma odpowiedź
+            //jest metoda future.isDone, którą można użyć w pęli while i robić w niej dodatkowe rzeczy
+            //jest i future.get(delay, TimeUnit), który rzuca wyjątek jeśli nie ma rezultatu w określonym czasie
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        System.out.println("After the RS.");
         executorService.shutdown();
     }
 }
