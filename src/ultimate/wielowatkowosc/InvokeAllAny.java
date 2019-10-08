@@ -49,5 +49,7 @@ public class InvokeAllAny {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+
+        executorService.shutdown();
     }
 }
