@@ -34,6 +34,8 @@ public class CompletableFutureNieblokujacy {
                 }).thenApply(r -> r + 1)
                 .thenAccept(System.out::println);
 
+        System.out.println("NIE BLOKUJE!");
+
         executor.shutdown();
     }
 }
