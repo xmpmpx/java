@@ -1,5 +1,6 @@
 package ultimate.wielowatkowosc;
 
+import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,9 +13,18 @@ public class CompletableFutureNieblokujacy {
 
         //Obie metody przyjmuja jako drugi parametr Executor.
 
-        Runnable runnable = () -> System.out.println("Wątek: " + Thread.currentThread().getName());
+        Runnable runnable = () -> {
+            System.out.println("Wątek: " + Thread.currentThread().getName());
+            Scanner scanner = new Scanner(System.in);
+            String key;
+            do {
+                key = scanner.nextLine();
+                System.out.println(key);
+            } while (!key.equals("end"));
+            System.err.println("KONIEC");
+        };
 
-        CompletableFuture.runAsync(runnable); //przyjmuje Runnable, nic nie zwraca
+        CompletableFuture.runAsync(runnable, executor); //przyjmuje Runnable, nic nie zwraca
 
         //--------------------------------------------------------------------------
         Supplier<Integer> supplier = () -> {
@@ -25,7 +35,10 @@ public class CompletableFutureNieblokujacy {
         CompletableFuture.supplyAsync(supplier, executor)
                 .thenApply(r -> {
                     try {
-                        TimeUnit.SECONDS.sleep(5);
+                        for (int i = 0; i < 10; i++) {
+                            System.out.println(i);
+                            TimeUnit.SECONDS.sleep(2);
+                        }
                     } catch (InterruptedException e) {
                         e.getMessage();
                     }
