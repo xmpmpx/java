@@ -20,35 +20,35 @@ public class Rounding {
             1.2, 2.3, 3.4, 4.5,
             100.15, 100.0, 105.0, 100, 103);
 
-    public static final List<Double> ROUNDINGS = Arrays.asList(
-            1.00, 0.01, 0.10, 5.0, 1.0, 100.0, 10.0);
+    public static final List<String> ROUNDINGS = Arrays.asList(
+            "1.00", "0.01", "0.10", "5", "1.0", "100", "10");
 
 
-    protected static String getFormattedRate(double converted, double fareRoundingUnit, double otherRoundingUnit, boolean isFare) {
-        if (fareRoundingUnit != 0 && otherRoundingUnit != 0) {
-            String format = isFare ? getFormat(fareRoundingUnit) : getFormat(otherRoundingUnit);
+    protected static String getFormattedRate(double converted, String fareRoundingUnit, String otherRoundingUnit, boolean isFare) {
+        if (StringUtils.isNotBlank(fareRoundingUnit)&& StringUtils.isNotBlank(otherRoundingUnit)) {
+            String format = isFare ? getFormat(otherRoundingUnit) : getFormat(otherRoundingUnit);
             DecimalFormat decimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.UK));
             decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
             String format1 = decimalFormat.format(BigDecimal.valueOf(converted));
+
             return StringUtils.rightPad(format1, format.length(), "0");
         }
         return Double.toString(converted);
     }
 
-    protected static String getFormat(double roundingUnit) {
-        if (DoubleMath.isMathematicalInteger(roundingUnit)) {
+    protected static String getFormat(String roundingUnit) {
+        if (!roundingUnit.contains(".")) {
             return "#0";
-        }
-        String unit = Double.toString(roundingUnit);
-        String fractpart = unit.substring(unit.indexOf(".") + 1);
+        }//do poprawienia
+        String fractpart = roundingUnit.substring(roundingUnit.indexOf(".") + 1);
         return "#0." + fractpart.replaceAll(".", "#");
     }
 
     public static void main(String[] args) {
-        for (Double rounding : ROUNDINGS) {
+        for (String rounding : ROUNDINGS) {
             System.out.println(getFormat(rounding));
         }
 
-        System.out.println(getFormattedRate(3.45, 1, 1, false));
+        System.out.println(getFormattedRate(123.45, "0.10", "0.10", false));
     }
 }
