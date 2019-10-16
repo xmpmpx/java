@@ -43,6 +43,10 @@ public class Rounding {
     }
 
     public static void main(String[] args) {
+        for (Double rounding : ROUNDINGS) {
+            System.out.println(getFormat(rounding));
+        }
 
+        System.out.println(getFormattedRate(3.45, 1, 1, false));
     }
 }

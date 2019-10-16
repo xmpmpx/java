@@ -32,7 +32,7 @@ public class Restrictions {
 
     public static int rozmiarListy2(ArrayList<? super PrintWriter> lista) { // tylko typy nadrzędne typu PrintWriter
         Object object = lista.get(0); // Object bo nie wiemy jaki typ
-        lista.add(new PrintWriter(Writer.nullWriter())); // Można dodać wartość typu
+        //lista.add(new PrintWriter(Writer.nullWriter())); // Można dodać wartość typu
         return lista.size();
     }
 }
