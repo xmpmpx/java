@@ -1,3 +1,4 @@
+/*
 package project;
 
 import org.joda.time.Period;
@@ -53,3 +54,4 @@ public class Test {
         System.out.println("Validation = " + (nullsFrequency != objects.size() && nullsFrequency != 0));
     }
 }
+*/
