@@ -1,6 +1,7 @@
 package project;
 
 import com.google.common.math.DoubleMath;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,17 +29,18 @@ public class Rounding {
             String format = isFare ? getFormat(fareRoundingUnit) : getFormat(otherRoundingUnit);
             DecimalFormat decimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.UK));
             decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
-            return decimalFormat.format(BigDecimal.valueOf(converted));
+            String format1 = decimalFormat.format(BigDecimal.valueOf(converted));
+            return StringUtils.rightPad(format1, format.length(), "0");
         }
         return Double.toString(converted);
     }
 
     protected static String getFormat(double roundingUnit) {
-        if(DoubleMath.isMathematicalInteger(roundingUnit)) {
+        if (DoubleMath.isMathematicalInteger(roundingUnit)) {
             return "#0";
         }
         String unit = Double.toString(roundingUnit);
-        String fractpart = unit.substring(unit.indexOf(".")+1);
+        String fractpart = unit.substring(unit.indexOf(".") + 1);
         return "#0." + fractpart.replaceAll(".", "#");
     }
 
