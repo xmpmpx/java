@@ -1,15 +1,10 @@
 package project;
 
-import com.google.common.math.DoubleMath;
+import com.openjaw.utils.MathUtilities;
 import org.apache.commons.lang3.StringUtils;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public class Rounding {
 
@@ -25,30 +20,84 @@ public class Rounding {
 
 
     protected static String getFormattedRate(double converted, String fareRoundingUnit, String otherRoundingUnit, boolean isFare) {
-        if (StringUtils.isNotBlank(fareRoundingUnit)&& StringUtils.isNotBlank(otherRoundingUnit)) {
-            String format = isFare ? getFormat(otherRoundingUnit) : getFormat(otherRoundingUnit);
-            DecimalFormat decimalFormat = new DecimalFormat(format, new DecimalFormatSymbols(Locale.UK));
-            decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
-            String format1 = decimalFormat.format(BigDecimal.valueOf(converted));
-
-            return StringUtils.rightPad(format1, format.length(), "0");
+        if (StringUtils.isNotBlank(fareRoundingUnit) && StringUtils.isNotBlank(otherRoundingUnit)) {
+            String unit = isFare ? fareRoundingUnit : otherRoundingUnit;
+            String rounded = MathUtilities.roundUp(converted, unit);
+            return formatDecimal(rounded, unit);
         }
         return Double.toString(converted);
     }
 
-    protected static String getFormat(String roundingUnit) {
-        if (!roundingUnit.contains(".")) {
-            return "#0";
-        }//do poprawienia
-        String fractpart = roundingUnit.substring(roundingUnit.indexOf(".") + 1);
-        return "#0." + fractpart.replaceAll(".", "#");
+    private static String formatDecimal(String rounded, String unit) {
+        int unitFraction = unit.contains(".") ? unit.substring(unit.indexOf(".") + 1).length() : 0;
+        int roundedFraction = rounded.contains(".") ? rounded.substring(rounded.indexOf(".") + 1).length() : 0;
+        int trailingZerosNum = unitFraction - roundedFraction;
+        String dot = trailingZerosNum > 0 && roundedFraction == 0 ? "." : "";
+        return rounded + dot + StringUtils.repeat("0", trailingZerosNum);
     }
+
+    protected static FormatInfo getFormatInfo(String roundingUnit) {
+        FormatInfo fi = new FormatInfo();
+        fi.length = roundingUnit.length();
+        if (!roundingUnit.contains(".")) {
+            fi.isWholeNum = true;
+            fi.intpart = roundingUnit;
+            fi.fractpart = null;
+            fi.decimal = 0;
+        } else {
+            fi.intpart = roundingUnit.substring(0, roundingUnit.indexOf("."));
+            String fractpart = roundingUnit.substring(roundingUnit.indexOf(".") + 1);
+            fi.decimal = fractpart.length();
+            if (fractpart.matches("0+")) {
+                fi.isWholeNum = true;
+                fi.fractpart = fractpart;
+            } else {
+                fi.isWholeNum = false;
+                fi.fractpart = fractpart.replaceFirst("0+$", "");
+            }
+        }
+        System.out.println(roundingUnit + " | " + fi);
+        return fi;
+    }
+
+   static class FormatInfo {
+        boolean isWholeNum;
+        int decimal;
+        int length;
+        String intpart;
+        String fractpart;
+
+       @Override
+       public String toString() {
+           return "FormatInfo{" +
+                   "isWholeNum=" + isWholeNum +
+                   ", decimal=" + decimal +
+                   ", length=" + length +
+                   ", intpart='" + intpart + '\'' +
+                   ", fractpart='" + fractpart + '\'' +
+                   '}';
+       }
+   }
 
     public static void main(String[] args) {
         for (String rounding : ROUNDINGS) {
-            System.out.println(getFormat(rounding));
+            //getFormat(rounding);
         }
-
-        System.out.println(getFormattedRate(123.45, "0.10", "0.10", false));
+        String step = "1.000";
+        System.out.println(formatDecimal(MathUtilities.roundUp(0.0000000001, step), step));
+        System.out.println(formatDecimal(MathUtilities.roundUp(0.1007, step), step));
+        System.out.println(formatDecimal(MathUtilities.roundUp(0.107, step), step));
+        System.out.println(formatDecimal(MathUtilities.roundUp(0.17, step), step));
+        System.out.println(formatDecimal(MathUtilities.roundUp(0.10, step), step));
+        System.out.println(formatDecimal(MathUtilities.roundUp(0.1, step), step));
+        System.out.println(formatDecimal(MathUtilities.roundUp(0.1000, step), step));
+        System.out.println(formatDecimal(MathUtilities.roundUp(100, step), step));
+        System.out.println(formatDecimal(MathUtilities.roundUp(100.01, step), step));
+        System.out.println(formatDecimal(MathUtilities.roundUp(0.1010, step), step));
+        System.out.println(formatDecimal(MathUtilities.roundUp(1, step), step));
+        System.out.println(formatDecimal(MathUtilities.roundUp(1.0001, step), step));
+        System.out.println(formatDecimal(MathUtilities.roundUp(0.10, step), step));
+        System.out.println(formatDecimal(MathUtilities.roundUp(0.11, step), step));
+        //System.out.println(getFormattedRate(123.45, "0.10", "0.10", false));
     }
 }
