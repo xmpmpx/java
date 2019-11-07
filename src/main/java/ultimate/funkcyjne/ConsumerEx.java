@@ -19,7 +19,7 @@ public class ConsumerEx {
             System.out.print(integer + " ");
         };
 
-        IntStream.rangeClosed(1, 10).forEach(print::accept);
+        IntStream.rangeClosed(1, 10).forEach(print);
         System.out.println();
         IntStream.rangeClosed(1, 10).forEach(multiply::accept);
         System.out.println();
