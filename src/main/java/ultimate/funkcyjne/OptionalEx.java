@@ -1,6 +1,7 @@
 package ultimate.funkcyjne;
 
 import java.util.Optional;
+import java.util.Random;
 
 public class OptionalEx {
 
@@ -26,8 +27,9 @@ public class OptionalEx {
     }
 
     public static Martini getMartini() {
-        int v = (int) (Math.random() * 10 + 1);
-        return v > 5 ? new Martini() : null;
+        Random random = new Random();
+        int v = (random.nextInt(2));
+        return v == 0 ? new Martini() : null;
     }
 }
 
