@@ -1,5 +1,6 @@
 package ultimate.funkcyjne;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -35,4 +36,30 @@ public class OptionalEx {
 
 class Martini {
     String name = "Martin";
+    String surnmae = "Parat";
+    Integer age = 29;
+
+    public Martini() {
+    }
+
+    public Martini(String name, String surnmae, Integer age) {
+        this.name = name;
+        this.surnmae = surnmae;
+        this.age = age;
+    }
+
+    public static List<Martini> getData() {
+        return List.of(new Martini("Marcin", "Parat", 29),
+                new Martini("Tomek", "Sliwa", 27),
+                new Martini("Jarek", "Stawarz", 25));
+    }
+
+    @Override
+    public String toString() {
+        return "Martini{" +
+                "name='" + name + '\'' +
+                ", surnmae='" + surnmae + '\'' +
+                ", age=" + age +
+                '}';
+    }
 }
