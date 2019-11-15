@@ -1,5 +1,6 @@
 package ultimate.funkcyjne;
 
+import java.util.function.BinaryOperator;
 import java.util.stream.IntStream;
 
 public class StreamMethods {
@@ -28,6 +29,9 @@ public class StreamMethods {
         System.out.println("Suma: " + silnia);
 
         IntStream.iterate(1, v -> v <= 5, v -> v + 1).reduce((left, right) -> left * right).ifPresent(System.out::println);
+
+        Martini.getData().stream().map(martini -> martini.age).reduce(BinaryOperator.minBy(Integer::compareTo)).ifPresent(System.out::println);
+        Martini.getData().stream().map(martini -> martini.age).reduce(Integer::max).ifPresent(System.out::println);
 
     }
 }
