@@ -1,6 +1,10 @@
 package ultimate.funkcyjne;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class StreamMethods {
@@ -32,6 +36,22 @@ public class StreamMethods {
 
         Martini.getData().stream().map(martini -> martini.age).reduce(BinaryOperator.minBy(Integer::compareTo)).ifPresent(System.out::println);
         Martini.getData().stream().map(martini -> martini.age).reduce(Integer::max).ifPresent(System.out::println);
+
+        List<Integer> list = Martini.getData().stream().map(martini -> martini.age).collect(Collectors.toList());
+        System.out.println("Ilość: " + Martini.getData().stream().map(martini -> martini.age).count());
+
+        String lista = Martini.getData().stream().map(martini -> martini.age.toString()).collect(Collectors.joining(","));
+        System.out.println(lista);
+
+        LinkedList<Martini> collect = Martini.getData().stream().collect(Collectors.toCollection(LinkedList::new));
+
+        Map<String, Integer> mapa = Martini.getData().stream().collect(Collectors.toMap(o -> o.name, o -> o.age));
+        for (Map.Entry<String, Integer> entry : mapa.entrySet()) {
+            System.out.println(entry.getKey() + " => " + entry.getValue());
+        }
+
+        Martini.getData().stream().collect(Collectors.groupingBy(o -> o.age))
+                .forEach((integer, martinis) -> System.out.println(integer + " | " + martinis));
 
     }
 }

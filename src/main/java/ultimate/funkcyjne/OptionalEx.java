@@ -51,7 +51,8 @@ class Martini {
     public static List<Martini> getData() {
         return List.of(new Martini("Marcin", "Parat", 29),
                 new Martini("Tomek", "Sliwa", 27),
-                new Martini("Jarek", "Stawarz", 25));
+                new Martini("Jarek", "Stawarz", 25),
+                new Martini("Jakiś", "Kmiot", 25));
     }
 
     @Override
