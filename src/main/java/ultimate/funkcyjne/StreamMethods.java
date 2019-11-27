@@ -1,5 +1,6 @@
 package ultimate.funkcyjne;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -53,5 +54,13 @@ public class StreamMethods {
         Martini.getData().stream().collect(Collectors.groupingBy(o -> o.age))
                 .forEach((integer, martinis) -> System.out.println(integer + " | " + martinis));
 
+        Martini.getData().stream().limit(1).forEach(System.out::println); // ogranicza do pierwszego elementu ze streama
+        Martini.getData().stream().skip(2).forEach(System.out::println); // pomija 2 pierwsze elementy
+        Martini.getData().stream().mapToInt(martini -> martini.age).distinct().forEach(System.out::println); // bazuje na equals()
+        System.out.println();
+        Martini.getData().stream().map(martini -> martini.age).sorted(Comparator.reverseOrder()).forEach(System.out::println);
+        Martini.getData().stream().sorted(Comparator.comparing(martini -> -martini.age)).forEach(System.out::println);
+
+        //IntStream, LongStream itd.
     }
 }
