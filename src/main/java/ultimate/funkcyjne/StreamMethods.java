@@ -1,9 +1,11 @@
 package ultimate.funkcyjne;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -62,5 +64,9 @@ public class StreamMethods {
         Martini.getData().stream().sorted(Comparator.comparing(martini -> -martini.age)).forEach(System.out::println);
 
         //IntStream, LongStream itd.
+
+        HashSet<Integer> lotto = new HashSet<>();
+        IntStream.iterate(new Random().nextInt(49), v -> lotto.size() < 6, v -> new Random().nextInt(49)).forEach(lotto::add);
+        System.out.println(lotto);
     }
 }
