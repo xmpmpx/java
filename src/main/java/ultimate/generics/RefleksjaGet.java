@@ -1,4 +1,4 @@
-package generics;
+package ultimate.generics;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

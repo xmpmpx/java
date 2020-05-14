@@ -1,4 +1,4 @@
-package generics;
+package ultimate.generics;
 
 import java.io.PrintWriter;
 import java.io.Writer;

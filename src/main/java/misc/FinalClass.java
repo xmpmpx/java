@@ -1,4 +1,4 @@
-package project;
+package misc;
 
 public final class FinalClass {
 

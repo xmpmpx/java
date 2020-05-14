@@ -1,4 +1,4 @@
-package generics;
+package ultimate.generics;
 
 interface Interfejs<E> {
 

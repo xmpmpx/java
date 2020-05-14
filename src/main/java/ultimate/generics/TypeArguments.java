@@ -1,4 +1,4 @@
-package generics;
+package ultimate.generics;
 
 import java.nio.ReadOnlyBufferException;
 import java.util.ArrayList;

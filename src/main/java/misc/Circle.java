@@ -1,6 +1,6 @@
-package project;
+package misc;
 
-import static project.Shape.PARAM;
+import static misc.Shape.PARAM;
 
 public class Circle extends Shape implements Inter<Integer> {
 

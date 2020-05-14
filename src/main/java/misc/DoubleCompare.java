@@ -1,4 +1,4 @@
-package project;
+package misc;
 
 public class DoubleCompare {
     public static void main(String[] args) {

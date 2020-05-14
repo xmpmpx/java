@@ -1,4 +1,4 @@
-package project;
+package misc;
 
 import java.util.Objects;
 

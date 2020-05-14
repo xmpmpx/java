@@ -1,4 +1,4 @@
-package generics;
+package ultimate.generics;
 
 public class Exceptions<E> { // nie można extends Exception, gdyż można byłoby łapać go wielokrotnie
     // z różnym parametrem typu, a po wymazaniu byłby to ten sam wyjątek łapany wieloktrotnie co być nie może
