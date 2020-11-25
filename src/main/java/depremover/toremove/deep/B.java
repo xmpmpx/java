@@ -1,6 +1,11 @@
 package depremover.toremove.deep;
 
+import java.lang.annotation.Native;
+
 public class B {
+
+    @Native
+    protected int field3 = 100;
 
     @Override
     @Deprecated
@@ -8,6 +13,13 @@ public class B {
         return super.equals(obj);
     }
 
+    @Native
+    @Deprecated
+    protected int field2 = 100;
+
+    /**
+     * To be removed.
+     */
     @Deprecated
     @Override
     public int hashCode() {
@@ -17,6 +29,7 @@ public class B {
     public void methodVoid() {
         System.out.println("Void");
     }
+
 
     public static void main(String[] args) {
 

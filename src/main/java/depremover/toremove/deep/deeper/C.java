@@ -8,6 +8,9 @@ public class C {
     @Native
     protected int field = 10;
 
+    /**
+     * To be removed.
+     */
     @Native
     @Deprecated
     protected int field2 = 100;
