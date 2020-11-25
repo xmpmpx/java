@@ -67,7 +67,7 @@ public class Depremover {
                 .filter(classOrInterfaceDeclaration -> classOrInterfaceDeclaration.isAnnotationPresent("Deprecated"))
                 .forEach(Node::removeForced);
 
-        classOrInterfaceDeclarations.stream().flatMap(classOrInterfaceDeclaration -> classOrInterfaceDeclaration.getMembers().stream())
+        classOrInterfaceDeclarations.stream().flatMap(classOrInterfaceDeclaration -> classOrInterfaceDeclaration.getFields().stream())
                 .filter(fieldDeclaration -> fieldDeclaration.isAnnotationPresent("Deprecated"))
                 .forEach(Node::remove);
 
