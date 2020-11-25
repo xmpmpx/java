@@ -42,7 +42,7 @@ public class Depremover {
 
             String newContent = removeDeps(oldContent);
             writer = new FileWriter(file);
-            if (newContent.split(System.lineSeparator()).length == 1) {
+            if (emptyClass(newContent)) {
                 file.deleteOnExit();
             } else {
                 writer.write(newContent);
@@ -57,6 +57,16 @@ public class Depremover {
                 e.printStackTrace();
             }
         }
+    }
+
+    private static boolean emptyClass(String newContent) {
+        String[] split = newContent.split(System.lineSeparator());
+        for (String s : split) {
+            if (!s.startsWith("import") && !s.startsWith("package") && !s.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static String removeDeps(String oldContent) {
