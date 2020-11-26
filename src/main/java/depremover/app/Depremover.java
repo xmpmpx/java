@@ -65,7 +65,12 @@ public class Depremover {
     private static boolean emptyClass(String newContent) {
         String[] split = newContent.split(System.lineSeparator());
         for (String s : split) {
-            if (!s.startsWith("import") && !s.startsWith("package") && !s.isEmpty()) {
+            s = s.trim();
+            if (!s.startsWith("import")
+                    && !s.startsWith("package")
+                    && !s.isEmpty()
+                    && !s.startsWith("/*")
+                    && !s.startsWith("*")) {
                 return false;
             }
         }
