@@ -6,14 +6,17 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Depremover {
@@ -35,20 +38,9 @@ public class Depremover {
     }
 
     static void processFile(File file) {
-        String oldContent = "";
-        BufferedReader reader = null;
         FileWriter writer = null;
-
         try {
-            reader = new BufferedReader(new FileReader(file));
-            String line = reader.readLine();
-
-            while (line != null) {
-                oldContent = oldContent + line + System.lineSeparator();
-                line = reader.readLine();
-            }
-
-            Pair<Boolean, String> newContent = removeDeps(oldContent);
+            Pair<Boolean, String> newContent = removeDeps(file);
             if (newContent.getLeft()) {
                 if (emptyClass(newContent.getRight())) {
                     file.deleteOnExit();
@@ -61,7 +53,6 @@ public class Depremover {
             e.printStackTrace();
         } finally {
             try {
-                reader.close();
                 if (writer != null) {
                     writer.close();
                 }
@@ -81,8 +72,9 @@ public class Depremover {
         return true;
     }
 
-    private static Pair<Boolean, String> removeDeps(String oldContent) {
+    private static Pair<Boolean, String> removeDeps(File oldContent) throws FileNotFoundException {
         CompilationUnit compilationUnit = StaticJavaParser.parse(oldContent);
+        LexicalPreservingPrinter.setup(compilationUnit);
         List<ClassOrInterfaceDeclaration> classOrInterfaceDeclarations = compilationUnit.findAll(ClassOrInterfaceDeclaration.class);
 
         List<ClassOrInterfaceDeclaration> depClazz = classOrInterfaceDeclarations.stream()
@@ -93,7 +85,6 @@ public class Depremover {
                 .flatMap(classOrInterfaceDeclaration -> classOrInterfaceDeclaration.getFields().stream())
                 .filter(fieldDeclaration -> fieldDeclaration.isAnnotationPresent("Deprecated"))
                 .collect(Collectors.toList());
-        ;
 
         List<MethodDeclaration> depMethods = classOrInterfaceDeclarations.stream().
                 flatMap(classOrInterfaceDeclaration -> classOrInterfaceDeclaration.getMethods().stream())
@@ -101,14 +92,15 @@ public class Depremover {
                 .collect(Collectors.toList());
 
         boolean isChanged = false;
-        Consumer<ClassOrInterfaceDeclaration> removeForced = Node::removeForced;
         if (!depClazz.isEmpty() || !depFields.isEmpty() || !depMethods.isEmpty()) {
-            depClazz.forEach(removeForced);
-            depFields.forEach(Node::remove);
-            depMethods.forEach(Node::remove);
+            depClazz.forEach(clazz -> clazz.getComment().ifPresent(Node::removeForced));
+            depFields.forEach(field -> field.getComment().ifPresent(Node::removeForced));
+            depMethods.forEach(method -> method.getComment().ifPresent(Node::removeForced));
+            depClazz.forEach(Node::removeForced);
+            depFields.forEach(Node::removeForced);
+            depMethods.forEach(Node::removeForced);
             isChanged = true;
         }
-
-        return Pair.of(isChanged, compilationUnit.toString());
+        return Pair.of(isChanged, LexicalPreservingPrinter.print(compilationUnit));
     }
 }
