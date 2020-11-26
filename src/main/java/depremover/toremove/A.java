@@ -5,6 +5,7 @@ import java.lang.annotation.Native;
 /**
  * To be removed.
  */
+
 @Deprecated
 public class A {
 
