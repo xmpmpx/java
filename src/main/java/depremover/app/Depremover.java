@@ -8,11 +8,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,10 +18,13 @@ import java.util.stream.Collectors;
 
 public class Depremover {
 
+    public static final String DEPREMOVER_TOREMOVE = "D:\\dev\\java\\src\\main\\java\\depremover\\toremove";
+    public static final String DEPREMOVER_NDC = "C:\\dev\\NDCModule\\src\\main";
+
     public static void main(String[] args) {
         try {
             long time = System.currentTimeMillis();
-            Files.walk(Paths.get("C:\\dev\\NDCModule\\src\\main"))
+            Files.walk(Paths.get(DEPREMOVER_TOREMOVE))
                     .filter(Files::isRegularFile).filter(path -> path.toString().endsWith(".java"))
                     .map(Path::toFile)
                     .forEach(Depremover::processFile);
@@ -93,7 +92,8 @@ public class Depremover {
         List<FieldDeclaration> depFields = classOrInterfaceDeclarations.stream()
                 .flatMap(classOrInterfaceDeclaration -> classOrInterfaceDeclaration.getFields().stream())
                 .filter(fieldDeclaration -> fieldDeclaration.isAnnotationPresent("Deprecated"))
-                .collect(Collectors.toList());;
+                .collect(Collectors.toList());
+        ;
 
         List<MethodDeclaration> depMethods = classOrInterfaceDeclarations.stream().
                 flatMap(classOrInterfaceDeclaration -> classOrInterfaceDeclaration.getMethods().stream())

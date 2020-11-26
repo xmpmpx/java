@@ -1,6 +1,7 @@
 package depremover.toremove.deep;
 
 import java.lang.annotation.Native;
+import java.util.stream.IntStream;
 
 public class B {
 
@@ -28,10 +29,16 @@ public class B {
 
     public void methodVoid() {
         System.out.println("Void");
+        int sum = IntStream.range(1, 10)
+                .filter(value -> value % 2 == 0)
+                .sum();
+        System.out.println(sum);
     }
 
 
     public static void main(String[] args) {
+
+
 
     }
 }
