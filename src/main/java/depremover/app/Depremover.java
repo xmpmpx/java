@@ -23,6 +23,8 @@ public class Depremover {
 
     public static final String DEPREMOVER_TOREMOVE = "D:\\dev\\java\\src\\main\\java\\depremover\\toremove";
     public static final String DEPREMOVER_NDC = "C:\\dev\\NDCModule\\src\\main";
+    public static int depCounter = 0;
+    public static int fileCounter = 0;
 
     public static void main(String[] args) {
         try {
@@ -31,7 +33,9 @@ public class Depremover {
                     .filter(Files::isRegularFile).filter(path -> path.toString().endsWith(".java"))
                     .map(Path::toFile)
                     .forEach(Depremover::processFile);
-            System.out.println(System.currentTimeMillis() - time + " ms");
+            System.out.println("Processing time: " + (System.currentTimeMillis() - time) + " ms");
+            System.out.println("Affected files: " + fileCounter);
+            System.out.println("Deps number: " + depCounter);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,8 +81,8 @@ public class Depremover {
         return true;
     }
 
-    private static Pair<Boolean, String> removeDeps(File oldContent) throws FileNotFoundException {
-        CompilationUnit compilationUnit = StaticJavaParser.parse(oldContent);
+    private static Pair<Boolean, String> removeDeps(File file) throws FileNotFoundException {
+        CompilationUnit compilationUnit = StaticJavaParser.parse(file);
         LexicalPreservingPrinter.setup(compilationUnit);
         List<ClassOrInterfaceDeclaration> classOrInterfaceDeclarations = compilationUnit.findAll(ClassOrInterfaceDeclaration.class);
 
@@ -98,6 +102,11 @@ public class Depremover {
 
         boolean isChanged = false;
         if (!depClazz.isEmpty() || !depFields.isEmpty() || !depMethods.isEmpty()) {
+            int currentFileDeps = depClazz.size() + depFields.size() + depMethods.size();
+            System.out.println(file.getName() + " - " + currentFileDeps + "deps");
+            fileCounter++;
+            depCounter = depCounter + currentFileDeps;
+
             depClazz.forEach(clazz -> clazz.getComment().ifPresent(Node::removeForced));
             depFields.forEach(field -> field.getComment().ifPresent(Node::removeForced));
             depMethods.forEach(method -> method.getComment().ifPresent(Node::removeForced));
