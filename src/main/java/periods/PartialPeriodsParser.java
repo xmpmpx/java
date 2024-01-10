@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class PartialPeriodsParser {
 
     public static final String INTERVAL_PATTERN = "dd.MM.yyyy HH:mm:ss";
+    public static final DateTimeFormatter INTERVAL_FORMATTER = DateTimeFormat.forPattern(INTERVAL_PATTERN);
     public static final String COMMA = ";";
     public static final String DASH = "-";
 
@@ -37,12 +38,14 @@ public class PartialPeriodsParser {
                 resultIntervals.add(existingInterval);
             }
         }
+        resultIntervals.sort(Comparator.comparing(AbstractInterval::getStart));
         return formatIntervals(resultIntervals);
     }
 
     public String unpublish(String existingIntervalsString, String newIntervalString) {
         List<Interval> existingIntervals = parseIntervals(existingIntervalsString);
         Interval newInterval = parseInterval(newIntervalString);
+
         Predicate<Interval> overlappingIntervalsPredicate = existingInterval -> existingInterval.overlaps(newInterval) || existingInterval.abuts(newInterval);
         List<Interval> overlappingIntervals = filerIntervals(existingIntervals, overlappingIntervalsPredicate);
         Interval overlappingIntervalsMerged = mergeIntervals(overlappingIntervals, newInterval);
@@ -52,7 +55,7 @@ public class PartialPeriodsParser {
         return formatIntervals(notOverlappingIntervals);
     }
 
-    public Interval mergeIntervals(List<Interval> intervals, Interval newInterval) {
+    private Interval mergeIntervals(List<Interval> intervals, Interval newInterval) {
         intervals.add(newInterval);
 
         DateTime earliestStart = intervals.get(0).getStart();
@@ -82,21 +85,12 @@ public class PartialPeriodsParser {
         return interval.getStart().toString(INTERVAL_PATTERN) + DASH + interval.getEnd().toString(INTERVAL_PATTERN);
     }
 
-    private static List<Interval> parseIntervals(String intervals) {
-        String[] intervalStrings = intervals.split(COMMA);
-        DateTimeFormatter formatter = DateTimeFormat.forPattern(INTERVAL_PATTERN);
-        return Arrays.stream(intervalStrings).map(intervalString -> parseInterval(intervalString, formatter)).collect(Collectors.toList());
+    private List<Interval> parseIntervals(String intervals) {
+        return Arrays.stream(intervals.split(COMMA)).map(this::parseInterval).collect(Collectors.toList());
     }
 
-    private static Interval parseInterval(String intervalString) {
-        DateTimeFormatter formatter = DateTimeFormat.forPattern(INTERVAL_PATTERN);
-        return parseInterval(intervalString, formatter);
-    }
-
-    private static Interval parseInterval(String intervalString, DateTimeFormatter formatter) {
+    private Interval parseInterval(String intervalString) {
         String[] parts = intervalString.split(DASH);
-        DateTime start = DateTime.parse(parts[0], formatter);
-        DateTime end = DateTime.parse(parts[1], formatter);
-        return new Interval(start, end);
+        return new Interval(DateTime.parse(parts[0], INTERVAL_FORMATTER), DateTime.parse(parts[1], INTERVAL_FORMATTER));
     }
 }
