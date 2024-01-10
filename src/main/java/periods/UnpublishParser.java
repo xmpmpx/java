@@ -6,6 +6,7 @@ import org.joda.time.base.AbstractInterval;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -14,10 +15,30 @@ import java.util.stream.Collectors;
 
 public class UnpublishParser {
 
-
     public static final String INTERVAL_PATTERN = "dd.MM.yyyy HH:mm:ss";
     public static final String COMMA = ";";
     public static final String DASH = "-";
+
+    public String publish(String existingIntervalsString, String newIntervalString) {
+        List<Interval> existingIntervals = parseIntervals(existingIntervalsString);
+        Interval newInterval = parseInterval(newIntervalString);
+
+        List<Interval> resultIntervals = new ArrayList<>();
+        for (Interval existingInterval : existingIntervals) {
+            if (newInterval.overlaps(existingInterval)) {
+                Interval overlap = newInterval.overlap(existingInterval);
+                if (overlap.getStart().isAfter(existingInterval.getStart())) {
+                    resultIntervals.add(new Interval(existingInterval.getStart(), overlap.getStart().minusSeconds(1)));
+                }
+                if (overlap.getEnd().isBefore(existingInterval.getEnd())) {
+                    resultIntervals.add(new Interval(overlap.getEnd().plusSeconds(1), existingInterval.getEnd()));
+                }
+            } else {
+                resultIntervals.add(existingInterval);
+            }
+        }
+        return formatIntervals(resultIntervals);
+    }
 
     public String unpublish(String existingIntervalsString, String newIntervalString) {
         List<Interval> existingIntervals = parseIntervals(existingIntervalsString);
