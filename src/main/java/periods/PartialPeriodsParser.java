@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class UnpublishParser {
+public class PartialPeriodsParser {
 
     public static final String INTERVAL_PATTERN = "dd.MM.yyyy HH:mm:ss";
     public static final String COMMA = ";";

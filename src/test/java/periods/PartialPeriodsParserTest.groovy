@@ -1,14 +1,13 @@
 package periods
 
-import periods.UnpublishParser
 import spock.lang.Specification
 
-class UnpublishParserTest extends Specification {
+class PartialPeriodsParserTest extends Specification {
 
     def "Unpublish"() {
 
         given: "partialPeriodsParser"
-        def partialPeriodsParser = new UnpublishParser()
+        def partialPeriodsParser = new PartialPeriodsParser()
 
         when: "unpublish"
         def result = partialPeriodsParser.unpublish(existingIntervals, newInterval)
@@ -31,7 +30,7 @@ class UnpublishParserTest extends Specification {
     def "publish"() {
 
         given: "partialPeriodsParser"
-        def partialPeriodsParser = new UnpublishParser()
+        def partialPeriodsParser = new PartialPeriodsParser()
 
         when: "unpublish"
         def result = partialPeriodsParser.publish(existingIntervals, newInterval)
