@@ -32,7 +32,7 @@ class PartialPeriodsParserTest extends Specification {
         given: "partialPeriodsParser"
         def partialPeriodsParser = new PartialPeriodsParser()
 
-        when: "unpublish"
+        when: "publish"
         def result = partialPeriodsParser.publish(existingIntervals, newInterval)
 
         then: "result is as expected"
