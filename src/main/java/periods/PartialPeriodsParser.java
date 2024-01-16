@@ -20,10 +20,7 @@ public class PartialPeriodsParser {
     public static final String COMMA = ";";
     public static final String DASH = "-";
 
-    public String publish(String existingIntervalsString, String newIntervalString) {
-        List<Interval> existingIntervals = parseIntervals(existingIntervalsString);
-        Interval newInterval = parseInterval(newIntervalString);
-
+    public List<Interval> publish(List<Interval> existingIntervals, Interval newInterval) {
         List<Interval> resultIntervals = new ArrayList<>();
         for (Interval existingInterval : existingIntervals) {
             if (newInterval.overlaps(existingInterval)) {
@@ -39,20 +36,17 @@ public class PartialPeriodsParser {
             }
         }
         resultIntervals.sort(Comparator.comparing(AbstractInterval::getStart));
-        return formatIntervals(resultIntervals);
+        return resultIntervals;
     }
 
-    public String unpublish(String existingIntervalsString, String newIntervalString) {
-        List<Interval> existingIntervals = parseIntervals(existingIntervalsString);
-        Interval newInterval = parseInterval(newIntervalString);
-
+    public List<Interval> unpublish(List<Interval> existingIntervals, Interval newInterval) {
         Predicate<Interval> overlappingIntervalsPredicate = existingInterval -> existingInterval.overlaps(newInterval) || existingInterval.abuts(newInterval);
         List<Interval> overlappingIntervals = filerIntervals(existingIntervals, overlappingIntervalsPredicate);
         Interval overlappingIntervalsMerged = mergeIntervals(overlappingIntervals, newInterval);
         List<Interval> notOverlappingIntervals = filerIntervals(existingIntervals, overlappingIntervalsPredicate.negate());
         notOverlappingIntervals.add(overlappingIntervalsMerged);
         notOverlappingIntervals.sort(Comparator.comparing(AbstractInterval::getStart));
-        return formatIntervals(notOverlappingIntervals);
+        return notOverlappingIntervals;
     }
 
     private Interval mergeIntervals(List<Interval> intervals, Interval newInterval) {
