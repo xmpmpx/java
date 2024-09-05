@@ -2,9 +2,9 @@ package misc;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -12,9 +12,9 @@ import java.util.Objects;
 public class EqualsTest {
 
     public static void main(String[] args) {
-        Wrapper w1 = new Wrapper("text", new Inside("text", new Car("car")), List.of(new Inside("text2", new Car("car")), new Inside("text3", new Car("car2"))));
+        Wrapper w1 = new Wrapper("text", new Inside("text", new Car("car")), List.of(new Inside("text2", new Car("car")), new Inside("text3", new Car("car2"))), Baby.BOY);
         w1.setId(1L);
-        Wrapper w2 = new Wrapper("text", new Inside("text", new Car("car")), List.of(new Inside("text3", new Car("car2")), new Inside("text2", new Car("car"))));
+        Wrapper w2 = new Wrapper("text", new Inside("text", new Car("car")), List.of(new Inside("text3", new Car("car2")), new Inside("text2", new Car("car"))), Baby.BOY);
         w2.setId(2L);
 
         System.out.println(w1.equals(w2));
@@ -29,6 +29,7 @@ class Wrapper extends Super {
     private String text;
     private Inside inside;
     private List<Inside> insides;
+    private Baby baby;
 
     @Override
     public boolean equals(Object o) {
@@ -39,7 +40,9 @@ class Wrapper extends Super {
 
         return Objects.equals(text, wrapper.text)
                 && Objects.equals(inside, wrapper.inside)
-                && new HashSet<>(insides).equals(new HashSet<>(wrapper.insides));
+                && Objects.equals(baby, wrapper.baby)
+                && new HashSet<>(insides != null ? insides : Collections.emptyList())
+                .equals(new HashSet<>(wrapper.insides != null ? wrapper.insides : Collections.emptyList()));
     }
 
     @Override
@@ -49,7 +52,6 @@ class Wrapper extends Super {
 }
 
 @Data
-@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 class Super {
@@ -58,7 +60,6 @@ class Super {
 }
 
 @Data
-@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 class Inside {
@@ -68,10 +69,13 @@ class Inside {
 }
 
 @Data
-@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 class Car {
 
     private String text;
+}
+
+enum Baby {
+    BOY, GIRL
 }
