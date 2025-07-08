@@ -1,11 +1,14 @@
 package tasks.users;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -25,10 +28,31 @@ public class Main {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Future<List<User>> parseFuture = executorService.submit(() -> parser.parse(testData));
         List<User> users = parseFuture.get();
+        executorService.shutdown();
 
         Map<String, Long> map = users.stream()
                 .collect(Collectors.groupingBy(User::city, Collectors.counting()));
 
         map.forEach((k, l) -> System.out.println(k + " : " + l));
+
+        String text = "Tomek,Maciek,Tomek, Marcin, Artur, Artur";
+
+        System.out.println();
+        Arrays.stream(text.split(","))
+                .map(String::trim)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed().thenComparing(Map.Entry.comparingByKey()))
+                .forEach(System.out::println);
+
+        System.out.println();
+
+        Arrays.stream(text.split(","))
+                .map(String::trim)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet().stream()
+                .sorted(Comparator.comparing(Map.Entry<String, Long>::getValue).reversed().thenComparing(Map.Entry::getKey))
+                .forEach(System.out::println);
+
     }
 }
