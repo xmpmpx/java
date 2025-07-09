@@ -3,7 +3,7 @@ package tasks.counter;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 public class Main {
@@ -19,20 +19,14 @@ public class Main {
 
         Endpoint endpoint = new Endpoint(new EndedCallService());
 
-        ExecutorService executorService = Executors.newFixedThreadPool(5);
-        Future<?> submit = executorService.submit(() -> {
-            IntStream.range(1, 11).forEach(value -> endpoint.addEndCall("Marcin"));
-            IntStream.range(1, 11).forEach(value -> endpoint.addEndCall("Tomek"));
-            return endpoint.getEndCallCount("Marcin");
-        });
-        Future<?> submit1 = executorService.submit(() -> {
-            IntStream.range(1, 11).forEach(value -> endpoint.addEndCall("Marcin"));
-            IntStream.range(1, 11).forEach(value -> endpoint.addEndCall("Tomek"));
-        });
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        IntStream.range(1, 1001).forEach(value -> executorService.submit(() -> {
+            endpoint.addEndCall("Marcin");
+            endpoint.addEndCall("Tomek");
 
-        submit.get();
-        submit1.get();
+        }));
         executorService.shutdown();
+        executorService.awaitTermination(5L, TimeUnit.SECONDS);
 
         System.out.println(endpoint.getEndCallCount("Marcin"));
         System.out.println(endpoint.getEndCallCount("Tomek"));
