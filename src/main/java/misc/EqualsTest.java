@@ -1,5 +1,7 @@
 package misc;
 
+import de.danielbechler.diff.ObjectDifferBuilder;
+import de.danielbechler.diff.node.DiffNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,16 @@ public class EqualsTest {
         w2.setId(2L);
 
         System.out.println(w1.equals(w2));
+        compareWithJavaObjectDiff(w1, w2);
+    }
+
+    public static void compareWithJavaObjectDiff(Object oldObject, Object newObject) {
+        DiffNode diff = ObjectDifferBuilder.buildDefault().compare(newObject, oldObject);
+        diff.visit((node, visit) -> {
+            if (node.hasChanges()) {
+                System.err.println("Changed property: " + node.getPath() + " " + node.getState().getReason());
+            }
+        });
     }
 }
 
