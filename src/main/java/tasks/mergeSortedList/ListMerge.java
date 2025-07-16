@@ -34,17 +34,8 @@ public class ListMerge {
             }
         }
 
-        if (integers1.size() > integers2.size()) {
-            result.addAll(integers1.subList(pointer1, integers1.size()));
-        } else {
-            result.addAll(integers2.subList(pointer2, integers2.size()));
-        }
-
-        if (pointer1 > pointer2) {
-            result.addAll(integers1.subList(pointer1, integers1.size()));
-        } else {
-            result.addAll(integers2.subList(pointer2, integers2.size()));
-        }
+        result.addAll(integers1.subList(pointer1, integers1.size()));
+        result.addAll(integers2.subList(pointer2, integers2.size()));
 
         return result;
     }
