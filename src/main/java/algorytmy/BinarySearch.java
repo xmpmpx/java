@@ -10,20 +10,23 @@ public class BinarySearch {
         int[] numbers = {1, 3, 6, 8, 10, 13, 16, 18, 20, 25, 28, 30};
         String[] words = {"Ala", "Bartek", "Celina", "Dominika", "Halina", "Justyna", "Marcin", "Sara", "Wiki", "Zuzia"};
 
-        binarySearch(words, 0, numbers.length - 1, "Marcin");
+        binarySearch(words, 0, words.length - 1, "Marcin");
 
     }
 
     public static void binarySearch(String[] array, int left, int right, String value) {
-        int index = (left + right) / 2;
-        if (array[index].charAt(0) > value.charAt(0) && index != right) {
-            binarySearch(array, left, index, value);
-        } else if (array[index].charAt(0) < value.charAt(0) && index != left) {
-            binarySearch(array, index, right, value);
-        } else if (value.equals(array[index])) {
-            System.out.println("Znaleziono: " + value + " - index: " + index);
-        } else {
+        if (left > right) {
             System.out.println("Nie znaleziono");
+            return;
+        }
+        int index = (left + right) / 2;
+        System.out.println("Odwiedzam: " + array[index]);
+        if (value.equals(array[index])) {
+            System.out.println("Znaleziono: " + value + " - index: " + index);
+        } else if (array[index].compareTo(value) > 0) {
+            binarySearch(array, left, index - 1, value);
+        } else if (array[index].compareTo(value) < 0) {
+            binarySearch(array, index + 1, right, value);
         }
     }
 }
